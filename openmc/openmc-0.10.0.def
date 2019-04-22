@@ -1,0 +1,20 @@
+Bootstrap: localimage
+From: ../openmpi/openmpi_3.1.4.sif
+
+%environment
+    export PYTHONPATH=/opt/openmc/0.10.0/lib/python3.7/site-packages
+    export OPENMC_CROSS_SECTIONS=/share/project/openmc/xs/nndc_hdf5/cross_sections.xml
+    export PATH=/opt/openmc/0.10.0/bin:$PATH
+
+%post
+    # Build OpenMC v0.10.0
+    wget https://github.com/openmc-dev/openmc/archive/v0.10.0.tar.gz
+    tar -zxf v0.10.0.tar.gz 
+    cd openmc-0.10.0
+    mkdir build && cd build
+    mkdir -p /opt/openmc/0.10.0/lib/python3.7/site-packages/
+    PATH=/anaconda3/bin:$PATH FC=mpif90 CC=mpicc HDF5_ROOT=/usr/local cmake .. -DCMAKE_INSTALL_PREFIX=/opt/openmc/0.10.0
+    make -j
+    make install
+    cd ../..
+    rm -rf openmc-0.10.0 v0.10.0.tar.gz

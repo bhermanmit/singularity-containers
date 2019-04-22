@@ -1,0 +1,20 @@
+Bootstrap: library
+From: ubuntu:18.10
+
+%environment
+    export PATH=/anaconda3/bin:$PATH
+
+%post
+    apt-get update
+    apt-get install -y wget
+    apt-get install -y gcc g++ gfortran
+    apt-get install -y make
+    apt-get install -y libtool
+    apt-get install -y language-pack-en
+    apt-get install -y cmake
+    apt-get install -y less vim
+
+    # Build Anaconda
+    wget -c https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh
+    /bin/bash Anaconda3-2019.03-Linux-x86_64.sh -bf
+    rm Anaconda3-2019.03-Linux-x86_64.sh
